@@ -1,0 +1,5 @@
+﻿  task4.c
+f:\programming\niit\labs\homework1\task1.4\homework4\task4.c(5): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+  main4.c
+  Создание кода...
+  HomeWork4.vcxproj -> F:\Programming\NIIT\Labs\HomeWork1\Task1.4\x64\Debug\HomeWork4.exe

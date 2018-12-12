@@ -1,0 +1,338 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_ASCII 256
+#define ARR_SIZE 8
+enum Boolean{false,true};
+typedef enum Boolean BOOL;
+
+struct SYM
+{
+   unsigned char ch;
+   float freq;
+   char code[256];
+   struct SYM *left;
+   struct SYM *right;
+};
+
+typedef struct SYM TSYM;
+
+union CODE {
+unsigned char ch;
+struct {
+         unsigned short b1:1;
+         unsigned short b2:1;
+         unsigned short b3:1;
+         unsigned short b4:1;
+         unsigned short b5:1;
+         unsigned short b6:1;
+         unsigned short b7:1;
+         unsigned short b8:1;
+} byte;
+};
+
+TSYM syms[MAX_ASCII];
+TSYM *psym[MAX_ASCII];
+FILE *fp;
+FILE *fp_101;
+FILE *fp_out;
+
+int counter=0;
+int counterUnSims=0;
+int counterNumber=0;
+
+BOOL openFiles(char** argv);
+void prepareStruct (TSYM syms[]);
+void sorting (TSYM syms[]);
+int print (TSYM syms[]);
+void fillStr(FILE *fp,TSYM syms[]);
+void matchingFreq (TSYM syms[]);
+void initializationPointer (TSYM syms[]);
+TSYM* buildTree(TSYM **psym, int N);
+void makeCodes(TSYM *root);
+void codingFile ();
+int takeCounterForCod ();
+void makeFileOut (int tail);
+void readAndPack(int tail,int bytes);
+unsigned char pack(unsigned char buf[]);
+BOOL closeFiles(char** argv);
+
+int main(int argc, char *argv[])
+{
+   int tail=0;
+   int bytes=0;
+
+   openFiles(argv);
+   prepareStruct (syms);
+   fillStr(fp,syms);
+   matchingFreq (syms);
+   sorting (syms);
+   counterUnSims=print (syms);
+   initializationPointer (syms);
+   TSYM *root=buildTree(psym,counterUnSims);
+   makeCodes(root);
+   rewind(fp);
+   codingFile(counterUnSims);
+   rewind(fp_101);
+   counterNumber=takeCounterForCod();
+   tail=counterNumber%8;
+   bytes=counterNumber/8;
+   makeFileOut (tail);
+   rewind(fp_101);
+   readAndPack(tail,bytes);
+   closeFiles(argv);
+   return 0;
+}
+
+BOOL openFiles(char** argv)
+{
+   BOOL result=true;
+
+   fp=fopen(argv[1],"rb");
+   if(fp==NULL)
+   {
+      perror("File:");
+      result= false;
+   }
+   fp_101=fopen(argv[2],"w+b");
+   if(fp_101==NULL)
+   {
+      perror("File:");
+      result= false;
+   }
+   fp_out=fopen(argv[3],"wb");
+   if(fp_out==NULL)
+   {
+      perror("File:");
+      result= false;
+   }
+   return result;
+}
+void prepareStruct (TSYM syms[])
+{
+   for(int i=0;i<MAX_ASCII;i++)
+   {
+      syms[i].ch=i;
+      syms[i].freq=0;
+      for(int j=0;j<MAX_ASCII;j++)
+      {
+         syms[i].code[j]=0;
+      }
+      syms[i].left=NULL;
+      syms[i].right=NULL;
+   }
+}
+void sorting (TSYM syms[])
+{
+   float hold=0;
+   char save='\0';
+   for(int pass=1;pass<MAX_ASCII;pass++)
+   {
+      for(int i=0;i<MAX_ASCII-1;i++)
+      {
+         if(syms[i].freq<syms[i+1].freq)
+         {
+            hold=syms[i+1].freq;
+            syms[i+1].freq=syms[i].freq;
+            syms[i].freq=hold;
+            save=syms[i+1].ch;
+            syms[i+1].ch=syms[i].ch;
+            syms[i].ch=save;
+         }
+      }
+   }
+}
+int print (TSYM syms[])
+{
+   int counterUnSims=0;
+   printf("\nSorted symbols: \n");
+   printf("----------------\n");
+   for(int i=0;i<MAX_ASCII;i++)
+   {
+      if(syms[i].freq > 0)
+      {
+         printf("Sorted Symbol: %c -   %f  \n",syms[i].ch,syms[i].freq);
+         counterUnSims++;
+      }
+   }
+   return counterUnSims;
+}
+void fillStr(FILE *fp,TSYM syms[])
+{
+   char sym;
+   int symNum;
+   while(!feof(fp))
+  {
+     fscanf(fp,"%c",&sym);
+     symNum = (int)sym;
+     syms[symNum].freq++;
+     counter++;
+  }
+}
+void matchingFreq (TSYM syms[])
+{
+   for(int i=0;i<MAX_ASCII;i++)
+   {
+      syms[i].freq=syms[i].freq/counter;
+   }
+}
+void initializationPointer (TSYM syms[])
+{
+   for(int i=0;i<MAX_ASCII;i++)
+   {
+      psym[i]=&syms[i];
+   }
+}
+TSYM* buildTree(TSYM **psym, int N)
+{
+   TSYM *temp=(TSYM*)malloc(sizeof(TSYM));
+   temp->freq=psym[N-2]->freq+psym[N-1]->freq;
+   temp->left=psym[N-1];
+   temp->right=psym[N-2];
+   temp->code[0]=0;
+   if(N==2)
+   {
+      return temp;
+   }
+   else
+   {
+      for(int i=0;i<N;i++)
+      {
+         if (temp->freq>psym[i]->freq)
+         {
+            for(int j=N-1;j>i;j--)
+            {
+               psym[j]=psym[j-1];
+            }
+            psym[i]=temp;
+            break;
+         }
+      }
+   }
+   return buildTree(psym,N-1);
+}
+void makeCodes(TSYM *root)
+{
+   if(root->left)
+   {
+      strcpy(root->left->code,root->code);
+      strcat(root->left->code,"0");
+      makeCodes(root->left);
+   }
+   if(root->right)
+   {
+      strcpy(root->right->code,root->code);
+      strcat(root->right->code,"1");
+      makeCodes(root->right);
+   }
+}
+void codingFile ()
+{
+   int ch=0;
+   int i=0;
+   while((ch=fgetc(fp))!=-1)
+   {
+      for(i=0;i<counterUnSims;i++)
+      {
+         if(syms[i].ch==(unsigned char)ch)
+         {
+            fputs(syms[i].code,fp_101);
+            break;
+         }
+      }
+   }
+}
+
+int takeCounterForCod ()
+{
+   int number=0;
+
+   while((number=fgetc(fp_101))!=-1)
+   {
+      counterNumber++;
+   }
+   return counterNumber;
+}
+void makeFileOut (int tail)
+{
+   int i=0;
+   int counterUnSim=counterUnSims-1;
+
+   fwrite("COMP",sizeof(char),4,fp_out);
+   fwrite(&counterUnSim,sizeof(int),1,fp_out);
+   fwrite(&tail,sizeof(int),1,fp_out);
+
+   for(i=0;i<counterUnSims;i++)
+   {
+       fwrite(&syms[i].ch,sizeof(char),1,fp_out);
+       fwrite(&syms[i].freq,sizeof(float),1,fp_out);
+   }
+}
+
+void readAndPack(int tail,int bytes)
+{
+   unsigned char buf[ARR_SIZE];
+   int i=0;
+   int ch=0;
+   union CODE code;
+
+   for(i=0;i<bytes;i++)
+   {
+      for(int j=0;j<8;j++)
+      {
+         ch=fgetc(fp_101);
+         buf[j]=ch;
+      }
+      code.ch=pack(buf);
+      fputc(code.ch,fp_out);
+   }
+   for(i=0;i<tail;i++)
+   {
+      ch=fgetc(fp_101);
+      buf[i]=ch;
+   }
+   code.ch=pack(buf);
+   fputc(code.ch,fp_out);
+
+}
+
+unsigned char pack(unsigned char buf[])
+{
+   union CODE code;
+   code.byte.b1=buf[0]-'0';
+   code.byte.b2=buf[1]-'0';
+   code.byte.b3=buf[2]-'0';
+   code.byte.b4=buf[3]-'0';
+   code.byte.b5=buf[4]-'0';
+   code.byte.b6=buf[5]-'0';
+   code.byte.b7=buf[6]-'0';
+   code.byte.b8=buf[7]-'0';
+   return code.ch;
+}
+BOOL closeFiles(char** argv)
+{
+   BOOL result=true;
+
+   fclose(fp);
+   if(fp==NULL)
+   {
+      perror("File:");
+      result= false;
+   }
+   fclose(fp_101);
+   if(fp_101==NULL)
+   {
+      perror("File:");
+      result= false;
+   }
+   fclose(fp_out);
+   if(fp_out==NULL)
+   {
+      perror("File:");
+      result= false;
+   }
+   return result;
+}
+

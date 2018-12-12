@@ -1,0 +1,5 @@
+﻿  task1.c
+f:\programming\niit\labs\homework5\task5.1\task5.1\task1.c(23): warning C4047: return: "char" отличается по уровням косвенного обращения от "char **"
+f:\programming\niit\labs\homework5\task5.1\task5.1\task1.c(28): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+f:\programming\niit\labs\homework5\task5.1\task5.1\task1.c(38): warning C4018: <: несоответствие типов со знаком и без знака
+  Task5.4.vcxproj -> F:\Programming\NIIT\Labs\HomeWork5\Task5.4\Debug\Task5.4.exe

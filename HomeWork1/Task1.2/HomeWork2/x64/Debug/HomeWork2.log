@@ -1,0 +1,5 @@
+﻿  task2.c
+  main2.c
+  Создание кода...
+f:\programming\niit\labs\homework1\task1.2\homework2\task2.c(13): warning C4715: greet: значение возвращается не при всех путях выполнения
+  HomeWork2.vcxproj -> F:\Programming\NIIT\Labs\HomeWork1\Task1.2\x64\Debug\HomeWork2.exe

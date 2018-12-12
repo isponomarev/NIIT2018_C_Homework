@@ -1,0 +1,5 @@
+﻿  task2.c
+  main2.c
+f:\programming\niit\labs\homework2\task2.2\homework2\main2.c(10): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Создание кода...
+  HomeWork2.vcxproj -> F:\Programming\NIIT\Labs\HomeWork2\Task2.2\x64\Debug\HomeWork2.exe

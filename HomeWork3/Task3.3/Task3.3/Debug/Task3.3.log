@@ -1,0 +1,4 @@
+﻿  task3.c
+f:\programming\niit\labs\homework3\task3.3\task3.3\task3.c(12): warning C4018: <: несоответствие типов со знаком и без знака
+f:\programming\niit\labs\homework3\task3.3\task3.3\task3.c(33): warning C4018: <=: несоответствие типов со знаком и без знака
+  Task3.3.vcxproj -> F:\Programming\NIIT\Labs\HomeWork3\Task3.3\Debug\Task3.3.exe

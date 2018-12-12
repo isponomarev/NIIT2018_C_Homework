@@ -1,0 +1,4 @@
+﻿  main2.c
+f:\programming\niit\labs\hw2\homework2\homework2\main2.c(10): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+  HomeWork2.vcxproj -> F:\Programming\NIIT\Labs\hw2\HomeWork2\Debug\HomeWork2.exe
+  HomeWork2.vcxproj -> F:\Programming\NIIT\Labs\hw2\HomeWork2\Debug\HomeWork2.pdb (Full PDB)

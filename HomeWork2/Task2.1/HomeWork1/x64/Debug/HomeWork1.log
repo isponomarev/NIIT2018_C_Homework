@@ -1,0 +1,6 @@
+﻿  task1.c
+f:\programming\niit\labs\homework2\task2.1\homework1\task1.c(8): warning C4244: функция: преобразование "int" в "float", возможна потеря данных
+f:\programming\niit\labs\homework2\task2.1\homework1\task1.c(8): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+  main1.c
+  Создание кода...
+  HomeWork1.vcxproj -> F:\Programming\NIIT\Labs\HomeWork2\Task2.1\x64\Debug\HomeWork1.exe

@@ -1,0 +1,4 @@
+﻿  main4.c
+f:\programming\niit\labs\hw2\homework4\homework4\main4.c(12): warning C4013: time: нет определения; предполагается "extern" с возвратом типа "int"
+  HomeWork4.vcxproj -> F:\Programming\NIIT\Labs\hw2\HomeWork4\Debug\HomeWork4.exe
+  HomeWork4.vcxproj -> F:\Programming\NIIT\Labs\hw2\HomeWork4\Debug\HomeWork4.pdb (Full PDB)

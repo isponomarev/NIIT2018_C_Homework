@@ -1,0 +1,5 @@
+﻿  task5.c
+f:\programming\niit\labs\homework2\task2.5\homework5\task5.c(10): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+  main5.c
+  Создание кода...
+  HomeWork5.vcxproj -> F:\Programming\NIIT\Labs\HomeWork2\Task2.5\x64\Debug\HomeWork5.exe

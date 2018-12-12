@@ -1,0 +1,5 @@
+﻿  task3.c
+f:\programming\niit\labs\homework5\task5.3\task5.3\task3.c(11): warning C4047: инициализация: "char" отличается по уровням косвенного обращения от "void *"
+f:\programming\niit\labs\homework5\task5.3\task5.3\task3.c(12): warning C4047: инициализация: "char" отличается по уровням косвенного обращения от "void *"
+f:\programming\niit\labs\homework5\task5.3\task5.3\task3.c(53): warning C4018: <: несоответствие типов со знаком и без знака
+  Task5.3.vcxproj -> F:\Programming\NIIT\Labs\HomeWork5\Task5.3\Debug\Task5.3.exe
